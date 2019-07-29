@@ -1,8 +1,3 @@
-# Exit build if not necessary
-before_install:
-  # run only if current implementation is modified
-  - bash .ci/has_to_run.sh || travis_terminate 0
-
 # Use docker to containerize frameworks
 services: docker
 
@@ -17,12 +12,7 @@ env:
     {{/frameworks}}
 
 script:
-  - shards install
-  - shards build
-  - bin/make config
-  - bin/make neph_config
-  - bin/neph ${FRAMEWORK} --mode=CI --seq
-  - crystal spec
+  - bash .ci/ci_test.sh
 
 notifications:
   email: false
